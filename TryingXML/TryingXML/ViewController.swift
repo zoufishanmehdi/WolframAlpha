@@ -5,25 +5,25 @@
 //  Created by C4Q on 5/8/16.
 //  Copyright © 2016 C4Q. All rights reserved.
 //
-
+//
 import UIKit
 import SWXMLHash
-
+//
 class ViewController: UIViewController{
     
     @IBOutlet weak var queryTextField: UITextField!
     @IBOutlet weak var answerLabel: UILabel!
-    
+
     //let urlstring = "http://www.nasa.gov/rss/dyn/breaking_news.rss"
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        loadParser()
-        
     }
+    
+  
+    
     
     
 //    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,15 +39,27 @@ class ViewController: UIViewController{
 //        return cell
 //    }
     
+    
+//    
+//    func swapSpace(str: String) -> String {
+//        
+//        var outputString = String()
+//        outputString = str.stringByReplacingOccurrencesOfString(" ", withString: "%20")
+//        return outputString
+//    }
+//    
+//    
+    
+    
+    
     //MARK - parser
-    var textInput: String? {
-        swapSpace(String(queryTextField.text!))
-        return self.textInput
+
+    var textEntered: String? {
+        return String(queryTextField.text!)
     }
     
-    func swapSpace(str: String) -> String {
-        
-        return str.stringByReplacingOccurrencesOfString(" ", withString: "%20")
+    var textInput:String {
+        return textEntered!.stringByAddingPercentEncodingWithAllowedCharacters( NSCharacterSet.URLQueryAllowedCharacterSet())!
     }
     
     
@@ -56,7 +68,7 @@ class ViewController: UIViewController{
         
         // append params
         urlString = urlString.stringByAppendingString("input=how%20many%20")
-        urlString = urlString.stringByAppendingString(textInput!)
+        urlString = urlString.stringByAppendingString(textInput)
         urlString = urlString.stringByAppendingString("%20fill%20up%20the%20moon")
         
         return NSURL(string: urlString)
@@ -71,7 +83,7 @@ class ViewController: UIViewController{
         
       // let request = NSMutableURLRequest(URL: NSURL(string: urlstring)!)
         
-        let request = NSMutableURLRequest(URL:(createURLWithString(textInput!))!)
+        let request = NSMutableURLRequest(URL:(createURLWithString(textInput))!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "GET"
         
@@ -114,6 +126,12 @@ class ViewController: UIViewController{
         }
         task.resume()
         
+    }
+    
+    
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        self.items = [ ]
+        loadParser()
     }
     
     
